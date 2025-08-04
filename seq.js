@@ -140,8 +140,9 @@ var scaleComputed = [0, 2, 4, 5, 7, 9, 11];
 
 function play() {
 
+
     scaleComputed = generateModeFromSteps(0, scale);
-    log(scaleComputed)
+
     for (var i = 0; i < voices.length; i++) {
         var voice = voices[i];
 
@@ -236,7 +237,7 @@ function getNoteCost(prevPitch, candidatePitch, otherNotes, baseNote) {
     var cost = 0;
     var baseDif = Math.abs(candidatePitch - baseNote);
 
-    if (baseDif > 12) {
+    if (baseDif > 8) {
         cost += baseDif;
     }
     var interval = Math.abs(candidatePitch - prevPitch);
@@ -285,21 +286,37 @@ function genScale(scale, centerOctave) {
     }
     return ar;
 }
-var root = -2;
+var root = 0;
 
 
 function setRoot(val){
-    root = [-2,-4,-6,-8,2,4,6,8].get(val);
-
+    root = val;
     log("root:", root)
+}
+
+function getSchillingScale(){
+    var bar = Math.floor(cnt/4);
+
+    if (bar % PL === 0 || bar % PL-1 ===0) {
+        return [0,2,4].map(function (struct) {
+            return scaleComputed.get(struct + srm.get(bar));
+        })
+    }
+    return [
+        [0, 2, 4],
+        [0, 2, 4,6],
+        [0, 2, 4,6,8],
+        [0, 2, 4,6,8,10],
+            ].get(root).map(function (struct) {
+        return scaleComputed.get(struct + srm.get(bar));
+    })
+
 }
 
 function generateNextPitch(trackIndex) {
     var track = voices[trackIndex];
     var prevPitch = track.lastNote;
-    var sc = [0, 2, 4, 6].map(function (struct) {
-        return scaleComputed.get(struct + root);
-    })
+    var sc = getSchillingScale();
 
     var scale = genScale(sc, Math.round(prevPitch / 12));
 
