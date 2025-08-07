@@ -162,7 +162,7 @@ function play() {
 
 
 function setScale(value) {
-    scale = value;
+    scale = value*7%12;
     log(generateModeFromSteps(0, scale))
 }
 
@@ -286,28 +286,29 @@ function genScale(scale, centerOctave) {
     }
     return ar;
 }
+
 var root = 0;
 
 
-function setRoot(val){
+function setRoot(val) {
     root = val;
     log("root:", root)
 }
 
-function getSchillingScale(){
-    var bar = Math.floor(cnt/4);
+function getSchillingScale() {
+    var bar = Math.floor(cnt / 4);
 
-    if (bar % PL === 0 || bar % PL-1 ===0) {
-        return [0,2,4].map(function (struct) {
+    if (bar % PL === 0 || bar % PL - 1 === 0) {
+        return [0, 2, 4].map(function (struct) {
             return scaleComputed.get(struct + srm.get(bar));
         })
     }
     return [
         [0, 2, 4],
-        [0, 2, 4,6],
-        [0, 2, 4,6,8],
-        [0, 2, 4,6,8,10],
-            ].get(root).map(function (struct) {
+        [0, 2, 4, 6],
+        [0, 2, 4, 6, 8],
+        [0, 2, 4, 6, 8, 10],
+    ].get(root).map(function (struct) {
         return scaleComputed.get(struct + srm.get(bar));
     })
 
