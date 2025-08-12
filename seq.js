@@ -295,7 +295,6 @@ function setRoot(val) {
     log("root:", root)
 }
 
-
 function getSchillingScale() {
     var bar = Math.floor(cnt / 4);
 
