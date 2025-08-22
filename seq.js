@@ -148,6 +148,7 @@ function play() {
 
         if (cnt % voice.len == 0) {
             outlet(0, [voice.lastNote, 0, 0]);
+            outlet(0, [voice.lastNote, 0, 1 + i]);
             var newNote = generateNextPitch(i);
             voice.direction = sign(newNote, voice.lastNote);
             voice.lastNote = newNote;
