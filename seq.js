@@ -145,12 +145,11 @@ function play() {
 
     for (var i = 0; i < voices.length; i++) {
         var voice = voices[i];
-
         if (cnt % voice.len == 0) {
             outlet(0, [voice.lastNote, 0, 0]);
             outlet(0, [voice.lastNote, 0, 1 + i]);
             var newNote = generateNextPitch(i);
-            voice.direction = sign(newNote, voice.lastNote);
+            voice.direction = sign(newNote - voice.lastNote);
             voice.lastNote = newNote;
             outlet(0, [voice.lastNote, 60, 0]);
             outlet(0, [voice.lastNote, 60, 1 + i]);
@@ -160,6 +159,37 @@ function play() {
     }
     cnt++;
 }
+
+
+function midi(note,vel){
+    if(vel==0)return;
+    var i = 0;
+    if(note%12 === 0){
+       i=0;
+    }else if(note%12 === 2){
+        i=1;
+    }else if(note%12 === 4){
+        i=2;
+    }else if(note%12 === 5){
+        i=3;
+    }
+
+    var voice = voices[i];
+    outlet(0, [voice.lastNote, 0, 0]);
+    outlet(0, [voice.lastNote, 0, 1 + i]);
+    var newNote = generateNextPitch(i);
+    voice.direction = sign(newNote - voice.lastNote);
+    voice.lastNote = newNote;
+    outlet(0, [voice.lastNote, 60, 0]);
+    outlet(0, [voice.lastNote, 60, 1 + i]);
+    voice.len = voice.durs.get(cnt)
+
+    if(note==0){
+        cnt++;
+    }
+
+}
+
 
 
 function setScale(value) {
@@ -277,7 +307,7 @@ function getNoteCost(prevPitch, candidatePitch, otherNotes, baseNote) {
 
 function genScale(scale, centerOctave) {
     var ar = [];
-    for (var i = centerOctave - 1; i <= centerOctave + 1; i++) {
+    for (var i = centerOctave - 2; i <= centerOctave + 2; i++) {
 
         for (var j = 0; j < scale.length; j++) {
             var note = scale[j] + 12 * i;
