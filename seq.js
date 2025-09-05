@@ -162,6 +162,8 @@ function play() {
 
 
 function midi(note,vel){
+
+    scaleComputed = generateModeFromSteps(0, scale);
     if(vel==0)return;
     var i = 0;
     if(note%12 === 0){
@@ -184,9 +186,6 @@ function midi(note,vel){
     outlet(0, [voice.lastNote, 60, 1 + i]);
     voice.len = voice.durs.get(cnt)
 
-    if(note==0){
-        cnt++;
-    }
 
 }
 
@@ -335,6 +334,7 @@ function getSchillingScale() {
         })
     }
     return [
+        [0],
         [0, 2, 4],
         [0, 2, 4, 6],
         [0, 2, 4, 6, 8],
